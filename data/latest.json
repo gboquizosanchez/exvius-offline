@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "revision": 13,
-  "version": "2026.11.16.13",
+  "revision": 14,
+  "version": "2026.11.16.14",
   "minAppVersionCode": 9076,
   "packs": [
     {
@@ -164,17 +164,16 @@
       "size": 5523384,
       "unpackedSize": 5510018,
       "sha256": "4d3fe54e15894e07c592aefa97325c5053372e833524aefdc4655cc27aa7617f"
+    },
+    {
+      "id": "spanish-es",
+      "url": "https://github.com/gboquizosanchez/exvius-offline/releases/download/es-r1/exvius-es-r1.zip",
+      "size": 778359309,
+      "unpackedSize": 833357245,
+      "sha256": "77c7374840336293f5252c21eede072aa40ba1f3bfb64367e2a026a7c720d87f"
     }
   ],
-  "downloadBytes": 18634180032,
-  "installedBytes": 19052071696,
-  "files": 16433,
-  "app": {
-    "version": "0.1.36",
-    "versionName": "9.0.0-offline.36",
-    "versionCode": 9076,
-    "url": "https://github.com/Elvlin/exvius-offline/releases/download/v0.1.36/exvius-offline-v0.1.36.apk",
-    "size": 41295064,
-    "sha256": "280cd1bc9abae9ecbc3fcb0ba5d1138dbc08511763166e2b120e2be0f41a42a7"
-  }
+  "downloadBytes": 19412539341,
+  "installedBytes": 19885428941,
+  "files": 16721
 }
