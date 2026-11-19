@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "revision": 14,
-  "version": "2026.11.16.14",
+  "revision": 15,
+  "version": "2026.11.16.15",
   "minAppVersionCode": 9076,
   "packs": [
     {
@@ -168,12 +168,19 @@
     {
       "id": "spanish-es",
       "url": "https://github.com/gboquizosanchez/exvius-offline/releases/download/es-r1/exvius-es-r1.zip",
-      "size": 778359309,
-      "unpackedSize": 833357245,
-      "sha256": "77c7374840336293f5252c21eede072aa40ba1f3bfb64367e2a026a7c720d87f"
+      "size": 779199309,
+      "unpackedSize": 834197245,
+      "sha256": "2855adbe850e6d8723735ac780fe95059090abc89b085b78bba6132d60aae5cd"
+    },
+    {
+      "id": "spanish-es-dialogue",
+      "url": "https://github.com/gboquizosanchez/exvius-offline/releases/download/es-r1/exvius-es-dialogue.zip",
+      "size": 1387660372,
+      "unpackedSize": 1387397560,
+      "sha256": "4195d1dad8c0dd384b1e9b34222f8f0a969ec79a51b48a8a8efa1bd0d5c72e19"
     }
   ],
-  "downloadBytes": 19412539341,
-  "installedBytes": 19885428941,
-  "files": 16721
+  "downloadBytes": 20801039713,
+  "installedBytes": 21273666501,
+  "files": 18202
 }

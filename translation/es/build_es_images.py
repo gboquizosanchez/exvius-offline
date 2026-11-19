@@ -6,14 +6,17 @@ English file names and versions are kept, so the client finds them where it expe
  - Loose files `en/sd/<path>`: replaced by `es/sd/<path>` when both exist.
 Only files that change are written.
 
-An atlas (`name.plist` + `name.png`) is replaced only when the Spanish plist has every frame of the
-author's one. The official images come from an older interface: a missing frame makes the client
-crash, so such an atlas keeps the author's version (both files, so they stay consistent).
+An atlas (`name.plist` + `name.png`) is replaced as a whole only when the Spanish plist has every
+frame of the author's one. The official images come from an older interface: a missing frame makes
+the client crash, so otherwise the author's atlas keeps its plist and its layout and receives the
+Spanish pixels frame by frame, wherever the same frame has the same size in both atlases.
 
 Example (needs `cricodecs`):
     build_es_images.py --author phone_en_img --official es_img --out out/es_img_over_en
 """
 import argparse
+import ast
+import io
 import json
 import plistlib
 import re
@@ -21,6 +24,7 @@ from collections import Counter
 from pathlib import Path, PurePosixPath
 
 from cricodecs import cpk
+from PIL import Image
 
 VERSION_PREFIX = re.compile(r'^Ver\d+_')
 
@@ -58,6 +62,59 @@ def stale_atlases(author, official, official_index):
     return stale
 
 
+def frame_box(frame):
+    """(box in the sheet, size, rotated) of a plist frame, or None for a format we do not know.
+
+    Formats 2 and 3 name the keys differently; a rotated frame is stored turned 90 degrees.
+    """
+    rect = frame.get('textureRect') or frame.get('frame')
+    if rect is None:
+        return None
+    (x, y), (width, height) = ast.literal_eval(rect.replace('{', '[').replace('}', ']'))
+    rotated = bool(frame.get('textureRotated', frame.get('rotated')))
+    stored = (height, width) if rotated else (width, height)
+    return (x, y, x + stored[0], y + stored[1]), (width, height), rotated
+
+
+def paste_spanish_frames(author_sheet, author_frames, official):
+    """Copy the official pixels of every frame that has the same size and rotation in both atlases."""
+    official_sheet, official_frames = official
+    for name, frame in author_frames.items():
+        mine = frame_box(frame)
+        theirs = frame_box(official_frames[name]) if name in official_frames else None
+        if mine and theirs and mine[1:] == theirs[1:]:
+            author_sheet.paste(official_sheet.crop(theirs[0]), mine[0][:2])
+
+
+def merge_atlas(author_entries, official_entries):
+    """PNG bytes of the author's sheet with the Spanish frames pasted in; plist untouched."""
+    author_sheet = Image.open(io.BytesIO(author_entries['png'])).convert('RGBA')
+    official_sheet = Image.open(io.BytesIO(official_entries['png'])).convert('RGBA')
+    author_frames = plistlib.loads(author_entries['plist'])['frames']
+    official_frames = plistlib.loads(official_entries['plist'])['frames']
+    paste_spanish_frames(author_sheet, author_frames, (official_sheet, official_frames))
+    output = io.BytesIO()
+    author_sheet.save(output, format='PNG')
+    return output.getvalue()
+
+
+def entry_bytes(pack, stem):
+    """{'png': bytes, 'plist': bytes} of one atlas in a pack, or None if it is not complete."""
+    found = {PurePosixPath(e.filename).suffix[1:]: pack.file_bytes(i) for i, e in enumerate(pack.files)
+             if PurePosixPath(e.filename).stem == stem and e.filename.endswith(('.png', '.plist'))}
+    return found if {'png', 'plist'} <= set(found) else None
+
+
+def merged_atlas_pngs(author, official, stale):
+    """filename of the sheet -> merged PNG bytes, for every stale atlas both packs hold completely."""
+    merged = {}
+    for stem in stale:
+        mine, theirs = entry_bytes(author, stem), entry_bytes(official, stem)
+        if mine and theirs:
+            merged[f'{stem}.png'] = merge_atlas(mine, theirs)
+    return merged
+
+
 def is_stale(filename, stale):
     path = PurePosixPath(filename)
     return path.suffix in ('.plist', '.png') and path.stem in stale
@@ -68,13 +125,14 @@ def merge_pack(author_file, official_file):
     author, official = cpk.load(str(author_file)), cpk.load(str(official_file))
     official_index = {entry.filename: index for index, entry in enumerate(official.files)}
     stale = stale_atlases(author, official, official_index)
+    atlas_pngs = merged_atlas_pngs(author, official, stale)
     replaced = 0
     for index, entry in enumerate(author.files):
+        data = atlas_pngs.get(entry.filename)
         other = official_index.get(entry.filename)
-        if other is None or is_stale(entry.filename, stale):
-            continue
-        data = official.file_bytes(other)
-        if data != author.file_bytes(index):
+        if data is None and other is not None and not is_stale(entry.filename, stale):
+            data = official.file_bytes(other)
+        if data is not None and data != author.file_bytes(index):
             author.replace_bytes(index, data, False)
             replaced += 1
     return (author.save_bytes(), replaced) if replaced else None

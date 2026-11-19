@@ -8,8 +8,9 @@ taken from `source/` in this repository, and every input/output is a command-lin
 | --- | --- |
 | `build_es_over_en.py` | Merges the official Spanish tables over the author's English ones, under the English names. |
 | `build_es_images.py` | Overlays Spanish images on the author's `en/sd` CPK packs. |
+| `build_es_dialogue.py` | Puts the official Spanish dialogue into the author's `event*`/`map*` CPK packs. |
 | `patch_es_text.py` | Patches `libgame.so` so the client reads the Spanish text columns. |
-| `package_es.py` | Builds the `spanish-es` data pack zip and the manifest (`data/latest.json`). |
+| `package_es.py` | Builds one data pack zip (`--pack-id`, `--root` folders) and adds it to the manifest (`data/latest.json`). |
 | `compare_es.py` | Reports how many rows still have no Spanish, per table. |
 | `census.py` | Counts filled cells per language column. |
 | `reset_lang.sh` | Puts the app's saved language back to English on a device (adb). |
