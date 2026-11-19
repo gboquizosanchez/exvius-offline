@@ -39,7 +39,7 @@ public final class DataPack {
         } else if (name.startsWith("native/")) {
             relative = name.substring(7);
             // exvius/equipment-enhancement holds the weapon enhancement event pages (banner, top, rewards).
-            if (!relative.matches("(?:mst|localized_texts|common_lang|en|homeMarquee|exvius/equipment-enhancement)/.+"))
+            if (!relative.matches("(?:mst|localized_texts|common_lang|en|es|homeMarquee|exvius/equipment-enhancement)/.+"))
                 throw new IOException("Unsupported game data path");
         } else if (name.equals("metadata/registry.json")) {
             relative = "exvius/data/registry.json";

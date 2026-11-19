@@ -29,8 +29,10 @@ import org.json.JSONObject;
 
 /** One complete first download, cached offline play, and static release updates. */
 public final class DataUpdates {
-    private static final String LATEST = "https://raw.githubusercontent.com/Elvlin/exvius-offline/main/data/latest.json";
+    private static final String LATEST = "https://raw.githubusercontent.com/gboquizosanchez/exvius-offline/spanish/data/latest.json";
     private static final String ASSETS = "https://github.com/Elvlin/exvius-offline/releases/download/";
+    // Spanish translation packs are published on the fork; every other pack still comes from the original releases.
+    private static final String ASSETS_ES = "https://github.com/gboquizosanchez/exvius-offline/releases/download/";
     private static final int MAX_UPDATE_INFO_BYTES = 524288;
     // This native app requires the external rules and content introduced in revision 13 (weapon enhancement pages).
     // Raise it whenever the engine needs files from a newer data revision.
@@ -356,7 +358,7 @@ public final class DataUpdates {
         for (int i = 0; i < packs.length(); i++) {
             JSONObject pack = packs.getJSONObject(i);
             if (!pack.getString("id").matches("[a-zA-Z0-9_-]{1,80}") || !ids.add(pack.getString("id")) ||
-                !pack.getString("url").startsWith(ASSETS) ||
+                !(pack.getString("url").startsWith(ASSETS) || pack.getString("url").startsWith(ASSETS_ES)) ||
                 !pack.getString("sha256").matches("[a-f0-9]{64}") ||
                 pack.getLong("size") < 1 || pack.getLong("size") >= 2147483648L ||
                 pack.getLong("unpackedSize") < 1)
