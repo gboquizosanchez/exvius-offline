@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "revision": 15,
-  "version": "2026.11.16.15",
+  "revision": 17,
+  "version": "2026.11.16.17",
   "minAppVersionCode": 9076,
   "packs": [
     {
@@ -178,9 +178,23 @@
       "size": 1387660372,
       "unpackedSize": 1387397560,
       "sha256": "4195d1dad8c0dd384b1e9b34222f8f0a969ec79a51b48a8a8efa1bd0d5c72e19"
+    },
+    {
+      "id": "spanish-es-cargando",
+      "url": "https://github.com/gboquizosanchez/exvius-offline/releases/download/es-r1/exvius-es-cargando.zip",
+      "size": 15867286,
+      "unpackedSize": 15866896,
+      "sha256": "01e8e57d14fe7fb83541834df7c503d9ec9cbe7c8aa3f38df4ac1f53d1c433e6"
+    },
+    {
+      "id": "spanish-es-banners",
+      "url": "https://github.com/gboquizosanchez/exvius-offline/releases/download/es-r1/exvius-es-banners.zip",
+      "size": 26219927,
+      "unpackedSize": 26201169,
+      "sha256": "48d8cf92decd35a2a05110ed034744253a1b5e0d3609a10fbf2b335a4797ed63"
     }
   ],
-  "downloadBytes": 20801039713,
-  "installedBytes": 21273666501,
-  "files": 18202
+  "downloadBytes": 20843126926,
+  "installedBytes": 21315734566,
+  "files": 18338
 }
